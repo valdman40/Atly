@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Comment from '../../types/comment';
+import {Comment} from '../../types/comment';
 
 const StyledCommentItem = styled.div`
   padding: 16px;

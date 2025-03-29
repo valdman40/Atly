@@ -1,18 +1,29 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import Comment from '../../types/comment';
+import React, { useEffect, useState, useRef, useCallback, use } from 'react';
+import {Comment} from '../../types/comment';
 import CommentItem from './CommentItem';
 import { getText } from '../../i18n/lang';
 import LoadingIndicator from '../common/LoadingIndicator';
 
 const amount = 20; // Number of comments to fetch at a time
 
-const CommentsList: React.FC = () => {
+/**
+ * Component to display a list of comments with infinite scrolling.
+ * @returns A list of comments with infinite scrolling functionality.
+ */
+const CommentsList: React.FC<{newComment?: Comment}> = ({newComment}) => {
     const [comments, setComments] = useState<Comment[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [page, setPage] = useState<number>(1);
     const [hasMore, setHasMore] = useState<boolean>(true);
 
     const observerRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if (newComment) {
+            setComments((comments) => [newComment, ...comments]);
+        }
+    }
+    , [newComment]);
 
     const fetchComments = async (page: number, limit: number = amount) => {
         try {
@@ -35,22 +46,20 @@ const CommentsList: React.FC = () => {
 
     useEffect(() => {
         if (hasMore) {
-            setLoading(true);
-            setTimeout(() => {
-                fetchComments(page);
-            }, 2000);
+            fetchComments(page);
+            // setLoading(true);
+            // setTimeout(() => {
+            //     fetchComments(page);
+            // }, 2000);
         }
     }, [page]);
 
-    const handleObserver = useCallback(
-        (entries: IntersectionObserverEntry[]) => {
-            const target = entries[0];
-            if (target.isIntersecting && !loading) {
-                setPage((page) => page + 1);
-            }
-        },
-        [loading]
-    );
+    const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
+        const target = entries[0];
+        if (target.isIntersecting && !loading) {
+            setPage((page) => page + 1);
+        }
+    }, [loading]);
 
     useEffect(() => {
         /**

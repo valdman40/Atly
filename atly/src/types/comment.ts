@@ -1,10 +1,13 @@
-interface Comment {
-    postId: number;
-    id: number;
+interface NewComment {
     name: string;
     email: string;
     body: string;
 }
 
-export default Comment;
+interface Comment extends NewComment {
+    postId: number;
+    id: number;
+}
+
+export type { NewComment, Comment };
   

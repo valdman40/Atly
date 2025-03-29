@@ -14,6 +14,11 @@ function getText(key: string): string {
         console.warn(`Language ${lang} not supported. Falling back to English.`);
         return translations.en?.[key] || key;
     }
+
+    if (!translations[lang]?.[key]) {
+        console.warn(`Key ${key} not found in ${lang} translations. Falling back to English.`);
+        return translations.en?.[key] || key;
+    }
     return translations?.[lang]?.[key];
 }
 

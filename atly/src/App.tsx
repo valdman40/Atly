@@ -1,8 +1,7 @@
-import React from 'react';
-import CommentsList from './components/comments/CommentsList';
+import Main from './pages/Main';
 
 function App() {
-  return <CommentsList />;
+  return <Main />;
 }
 
 export default App;
